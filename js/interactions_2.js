@@ -20,7 +20,7 @@ var display = {
 		
 		for (var i = 0; i < state.greens[num].ingredients.length; i++) {
 			if (state.greens[num].ingredients[i] !== false) {
-				ing.push(state.greens[num].ingredients[i])
+				ing.push(state.greens[num].ingredients[i]);
 			}
 		}
 		
@@ -65,21 +65,21 @@ var display = {
 	buttons: function(num) {
 		$(".button-class").html("<div class='text-center'><ul class='list-inline'><li><button class='btn btn-success'><a href=" + state.greens[num].website + " target='_blank'>Company Website</a></button></li> <li><button class='btn btn-success' data-toggle='modal' data-target='#myModal'>View the Label</button></li></ul></div>");
 		if (state.greens[num].link !== false) {
-			$(".button-class ul").append("<li><button class='btn btn-success'><a href=" + state.greens[num].link + " rel='nofollow' target='_blank'>Get It On Amazon</a></button></li>")
+			$(".button-class ul").append("<li><button class='btn btn-success'><a href=" + state.greens[num].link + " rel='nofollow' target='_blank'>Get It On Amazon</a></button></li>");
 		}
 		
 		if (state.greens[num].review !== false) {
-			$(".button-class ul").append("<li><button class='btn btn-success'><a href=" + state.greens[num].review + " target='_blank'>Read The Review</a></button></li>")
+			$(".button-class ul").append("<li><button class='btn btn-success'><a href=" + state.greens[num].review + " target='_blank'>Read The Review</a></button></li>");
 		}
 	},
 	
 	flavors: function(num) {
 		if (state.greens[num].taste.flavors === true) {
-			return "Has"
+			return "Has";
 		}
 		
 		else {
-			return "Doesn't have"
+			return "Doesn't have";
 		}
 	},
 	
