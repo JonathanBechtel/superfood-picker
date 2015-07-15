@@ -1,0 +1,45 @@
+#part2 {
+	display: none;
+}
+
+.winner  p {
+	font-size: 20px;
+}
+
+#chart-div {
+	display: inline-block;
+    margin: 0 auto !important;
+}
+
+.button-class a, .runner-up a, .runner-up-2 a, .runner-up-3 a {
+	color: #fff;
+}
+
+.runner-up img, .runner-up-2 img, .runner-up-3 img {
+	height: 250px;
+	width: 155px;
+}
+
+.col-xs-12  > .img img {
+	display: block;
+	margin: 0 auto !important;
+}
+
+.sort-box {
+	min-width: 100px;
+	min-height: 100px;
+	max-width: 250px;
+	border: 1 px solid black;
+	background-color: #ccc;
+}
+
+.sortable1 li, .sortable2 li {
+	padding-left: 5px;
+	padding-top: 5px;
+	border: 1 px solid #fff;
+	list-style-position: inside;
+}
+
+.btn-p {
+	margin-top: 10px;
+}
