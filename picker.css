@@ -43,3 +43,7 @@
 .btn-p {
 	margin-top: 10px;
 }
+
+.table-compare th, .table-compare td {
+	text-align: center;
+}
