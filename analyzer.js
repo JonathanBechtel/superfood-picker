@@ -6,11 +6,11 @@ var init = function() {
 		greens: [],
 		desired: ["caffeine", "algaes", "probiotics"],
 		forbidden: ["lecithin"],
-		price: null,
+		price: null, 
 		taste: {
-			greens: null,
-			sweetness: null,
-			flavors: null
+			greens: null,  
+			sweetness: null, 
+			flavors: null 
 		},
 		features: ["Organic", "NonGMO", "GlutenFree"],
 		priority: []
@@ -25,49 +25,49 @@ var price = {
 	difference: function(desiredPrice, productPrice) {
 		return ((productPrice.pricePer30 - desiredPrice)/desiredPrice) * 100;
 	},
-
+	
 	multiply: function(desiredPrice, productPrice) {
 		if (state.priority[0] === "price") {
 			return this.difference(desiredPrice, productPrice) * 1.5;
 		}
-
+		
 		else if (state.priority[1] === "price") {
 			return this.difference(desiredPrice, productPrice);
-		}
-
+		}	
+		
 		else {
 			return this.difference(desiredPrice, productPrice) * 0.5;
 		}
 	},
-
+	
 	compare: function(desiredPrice, productPrice) {
 		if (productPrice.pricePer30 <= desiredPrice) {
 			return 100;
-		}
-
+		}	
+		
 		else if (100 - (this.multiply(desiredPrice, productPrice)) < 0 ) {
 			return 0;
 		}
-
+	
 		else {
 			return  100 - (this.multiply(desiredPrice, productPrice));
 		}
 	},
-
+		
 	modify: function(desiredPrice, productPrice) {
 		if (state.priority[0] === "price") {
 			return this.compare(desiredPrice, productPrice) * 0.5;
 		}
-
+		
 		else if (state.priority[1] === "price") {
 			return this.compare(desiredPrice, productPrice) * 0.3;
 		}
-
+		
 		else {
 			return this.compare(desiredPrice, productPrice) * 0.2;
 		}
 	}
-
+	
 }
 
 //****** To Determine Taste Score ******//
@@ -77,34 +77,34 @@ var taste = {
 		if (desiredTaste === productTaste) {
 			return 5;
 		}
-
+		
 		else if (Math.abs(desiredTaste - productTaste) === 1) {
 			return 4.5;
 		}
-
+		
 		else if (Math.abs(desiredTaste - productTaste) === 2) {
 			return 3.75;
 		}
-
+		
 		else if (Math.abs(desiredTaste - productTaste) === 3) {
 			return 2.5;
 		}
-
+		
 		else {
 			return 1;
 		}
 	},
-
+	
 	set: function(desiredTaste, productTaste) {
 		if (desiredTaste === 1 || 2 || 4 || 5 ) {
 			return this.preference(desiredTaste, productTaste);
 		}
-
+		
 		else {
 			return 5;
 		}
 	},
-
+	
 	flavors: function(desiredFlavor, productFlavor) {
 		if (desiredFlavor === productFlavor || desiredFlavor === "Don't Care") {
 			return 3;
@@ -113,20 +113,20 @@ var taste = {
 			return 1.5;
 		}
 	},
-
+	
 	total: function(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) {
 		return ((this.set(desiredGreens, productGreens) + this.set(desiredSweetness, productSweetness) + this.flavors(desiredFlavors, productFlavors))/13) * 100;
 	},
-
+	
 	modify: function(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) {
 		if (state.priority[0] === "taste") {
 			return this.total(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) * 0.5;
 		}
-
+		
 		else if (state.priority[1] === "taste") {
 			return this.total(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) * 0.3;
 		}
-
+		
 		else {
 			return this.total(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) * 0.2;
 		}
@@ -140,28 +140,28 @@ var nutrients = {
 		if (product.features[0] === "organic" || product.features[8] === "wild crafted") {
 			return 10;
 		}
-
+	
 		else {
 			return 0;
 		}
 	},
-
+	
 	filler: function(product) {
 		var overage = product.filler - 0.10;
-
+		
 		if (product.filler <= 0.10) {
 			return 30;
 		}
-
+		
 		else if (overage > 0.3) {
 			return 0;
 		}
-
+		
 		else {
 			return 30 - (overage*100);
 		}
 	},
-
+	
 	composition: function(product) {
 		var counter = 0;
 		for (var i = 4; i < 12; i++ ) {
@@ -169,16 +169,16 @@ var nutrients = {
 				counter++;
 			}
 		}
-
+		
 		return ((counter++/8)*100)*0.6;
 	},
-
+	
 	internal: function(product) {
 		return this.organic(product) + this.filler(product) + this.composition(product);
 	},
-
+	
 	precision: {
-
+		
 		match: function(array1, array2) {
 			counter = 0;
 			if (array1.length > 0) {
@@ -189,52 +189,52 @@ var nutrients = {
 						}
 					}
 				}
-
+				
 				if (array1 === state.forbidden) {
 					return array1.length - counter;
 				}
-
+				
 				else {
 					return counter;
 				}
 			}
-
+			
 			else {
 				return 0;
 			}
 		},
-
+		
 		score: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 			var numerator = this.match(desiredFeatures, productFeatures) + this.match(desiredIngredients, productIngredients) + this.match(forbiddenIngredients, productIngredients);
 			var denominator = desiredFeatures.length + desiredIngredients.length + forbiddenIngredients.length;
-
+			
 			if (denominator > 0) {
 				return (numerator/denominator) * 100;
 			}
-
+			
 			else {
 				return nutrients.internal(product);
 			}
-
+			
 		}
 	},
-
+	
 	blend: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 		var internal = this.internal(product);
 		var external = this.precision.score(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product);
-
+		
 		return (internal + external)/2;
 	},
-
+	
 	modify: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 		if (state.priority[0] === "nutrients") {
 			return this.blend(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) * 0.5;
 		}
-
+		
 		else if (state.priority[1] === "nutrients") {
 			return this.blend(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) * 0.3;
 		}
-
+		
 		else {
 			return this.blend(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) * 0.2;
 		}
@@ -245,13 +245,13 @@ var total = {
 	score: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product, desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors, desiredPrice) {
 		return nutrients.modify(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) + taste.modify(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) + price.modify(desiredPrice, product);
 	},
-
+	
 	loop: function() {
 		for (var i = 0; i < state.greens.length; i++) {
 			state.greens[i].score = this.score(state.features, state.greens[i].features, state.desired, state.greens[i].ingredients, state.forbidden, state.greens[i], state.taste.greens, state.greens[i].taste.greens, state.taste.sweetness, state.greens[i].taste.sweetness, state.taste.flavors, state.greens[i].taste.flavors, state.price);
 		}
 	},
-
+	
 	reset: function() {
 		for (var i = 0; i < state.greens.length; i++) {
 			state.greens[i].score = null;
@@ -283,7 +283,7 @@ var storage = {
 			label: label,
 			score: null
 			}
-
+			
 			state.greens.push(greensPowder);
 	},
 
@@ -292,7 +292,7 @@ var storage = {
 		state.taste.greens = greens;
 		state.taste.sweetness = sweetness;
 		state.taste.flavors = flavors;
-
+		
 		state.priority.push(nutrients, cost, taste);
 	}
 }
@@ -302,11 +302,11 @@ var compare = {
 		if (a.score > b.score) {
 			return -1;
 		}
-
+		
 		if (a.score < b.score) {
 			return 1;
 		}
-
+		
 		return 0;
 	},
 
@@ -314,17 +314,17 @@ var compare = {
 		if (a.name < b.name) {
 			return -1;
 		}
-
+		
 		if (a.name > b.name) {
 			return 1;
 		}
-
+		
 		return 0;
 	}
 }
 
 var shuffle = function(array) {
-
+	
 	for (var i = array.length - 1; i > 0; i--) {
 		var j = Math.floor(Math.random() * (i + 1));
 		var temp = array[i];
@@ -350,4 +350,4 @@ storage.pack("Vitamineral Earth", 44.95, 4.28, 32, 0, 10.58, false, "fiber", fal
 storage.pack("Dr. Schulze's Superfood Plus", 40.00.toFixed(2), 2.86, 15, 0, 14, false, false, "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", false, false, false, "herbs", 2, 1, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/schulze_bottle.jpg", "http://amzn.to/1SgXr4X", "https://www.herbdoc.com/superfood-plus-powder.html?___SID=U", "http://blog.healthkismet.com/dr-schulze-superfood-plus-review", "http://www.healthkismet.com/img/superfood-picker/schulze_label.jpg");
 storage.set(60, 4, 4, false, "nutrients", "price", "taste");
 state.greens.sort(compare.name);
-$(function() { display.compare(); });
+$(function() { display.selectLoad(); });
