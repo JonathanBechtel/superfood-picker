@@ -350,4 +350,4 @@ storage.pack("Vitamineral Earth", 44.95, 4.28, 32, 0, 10.58, false, "fiber", fal
 storage.pack("Dr. Schulze's Superfood Plus", 40.00.toFixed(2), 2.86, 15, 0, 14, false, false, "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", false, false, false, "herbs", 2, 1, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/schulze_bottle.jpg", "http://amzn.to/1SgXr4X", "https://www.herbdoc.com/superfood-plus-powder.html?___SID=U", "http://blog.healthkismet.com/dr-schulze-superfood-plus-review", "http://www.healthkismet.com/img/superfood-picker/schulze_label.jpg");
 storage.set(60, 4, 4, false, "nutrients", "price", "taste");
 state.greens.sort(compare.name);
-display.compare();
+$(function() { display.compare(); });

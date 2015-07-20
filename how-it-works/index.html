@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+	<title>The Superfood Picker:  How It Works.</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="How the Superfood Picker Evaluates Products">
+    <meta name="keywords" content="health kismet, superfood picker, superfood picker faq, greens powder recommender, greens powder comparisons">
+    <meta name="author" content="Jonathan Bechtel">
+	
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+	<!-- Le CSS -->
+	
+	<!-- Latest compiled and minified CSS for bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/yeti/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Le Javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-551c102f432cf742" async="async"></script>
+
+				  <div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="row">
+				<nav class="navbar navbar-inverse">
+					<div class="navbar-header">
+					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					  </button>
+					  <a class="navbar-brand" href="http://www.healthkismet.com">Health Kismet</a>
+					</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						  <ul class="nav navbar-nav">
+							<li><a href="../">Superfood Picker <span class="sr-only">(current)</span></a></li>
+							<li class="active"><a href="/">How It Works</a></li>
+							<li class="dropdown">
+							  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Our Products <span class="caret"></span></a>
+							  <ul class="dropdown-menu" role="menu">
+								<li><a href="http://www.healthkismet.com/incredible-greens/">Incredible Greens</a></li>
+								<li><a href="http://www.healthkismet.com/incredible-berries/">Incredible Berries</a></li>
+								<li><a href="http://www.healthkismet.com/purple-dragon/">The Purple Dragon</a></li>
+							  </ul>
+							</li>
+							<li class="dropdown">
+							  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Blog <span class="caret"></span></a>
+							  <ul class="dropdown-menu" role="menu">
+								<li><a href="http://blog.healthkismet.com">Main</a></li>
+								<li><a href="http://blog.healthkismet.com/topics/product-reviews">Supplment Reviews</a></li>
+							  </ul>
+							</li>
+						  </ul>
+						</div><!-- /.navbar-collapse -->
+					</div><!-- /.container-fluid -->
+				</nav>
+			</div>
+
+<div class="container-fluid">
+<h1 class="text-center">How The Supplement Picker Works.</h1>
+
+<div class="col-md-10 col-md-offset-1">
+<p>Here’s a brief description of how the Superfood Picker determines its Match Score.</p>
+<strong>The Three Components:  Taste, Price, and Nutrients</strong>
+<p>It uses algorithms for each of these characteristics and then weights them according to your priorities.  The highest priority gets 50% of the weight, middle 30%, and the lowest 20%.</p>
+<p>Here’s how each one is determined:</p>
+<p><strong>Price</strong></p> 
+<p>This one’s the most straightforward.  It measures the difference between your desired price point and the price of the supplement notches down the supplement’s price score if it’s above that.</p>
+<p>The amount it gets penalized depends on how your prioritize price.</p>
+<p>So if someone says they’re willing to spend at most $20 and has price as their highest priority, then it assumes the $30 supplement will be a stretch for that person and that 50% price difference will cause the price score to go down substantially…….to about 40%. </p>
+<p>If you’re willing to pay $40 and have price as your lowest priority, then the $45 supplement will only see its score go down by a small amount.</p>
+<p><strong>Taste</strong></p>  
+<p>The taste score takes your choices for sweetness, grassiness, and the presence of flavors and contrasts them with those same characteristics the greens powder has.</p>
+<p>The big difference between the price and taste scores is that taste is subjective, while price is not.</p> 
+<p>So with taste there’s the possibility that what we consider “sweet” or “grassy” won’t align with your own assumptions.</p>
+<p>To compensate for this we change the taste score only moderate amounts for small differences.  The idea being that “mildly sweet” could mean different things to different people, so we don’t knock down the score if your preferences are close to that.</p>
+<p>However, we do assume that more people would be able to agree on what’s “extremely grassy” and thus make 1 for 1 score changes based off those differences.</p>
+<p><strong>Nutrients</strong></p> 
+<p>The nutrient score has two components:  the internal score and the precision score.</p>
+<p>The nutrient score is based entirely off the internal characteristics of the nutrient powder.  It works like this:</p>
+<p><strong>It rewards products that are organic or wild crafted.</strong>  Product with these certifications get a 10% bonus.</p> 
+<p><strong>It punishes products that have large amounts of low quality ingredients.</strong>  Each product is allotted 10% of their formula to be devoted to fibrous ingredients and above that it gets penalized.  This comprises 40% of the internal score.</p>
+<p><strong>It rewards products for having a diversity of ingredients.</strong>  The idea is that something that has wheatgrass + spirulina is more preferable than something that has only wheatgrass.  This comprises 50% of the internal score.</p>
+<p><strong>The precision score.</strong></p>
+<p>The second part of the nutrient score is the precision score, which measures how closely your own ingredient preferences match those of the nutrient powder.</p>
+<p>For example, suppose you state in your choices that you want something that’s organic and vegan.  A product that’s both will have a precision score of 100%, a product that’s one will have a precision score of 50%, none will have a score of 0%.</p>
+<p>The final nutrient score is a blend of the internal and precision score.</p>
+<p>So if a product has a precision score of 0 and an internal score of 80 it’s total nutrient score is 40.</p>
+<p>If you have no preferences the precision score vanishes and only the internal score is used.</p> 
+<p><strong>What Are Its Weaknesses?</strong></p>
+<p>There’s probably no way to judge greens powders with total accuracy.</p>
+<p>So with that caveat I believe these are the biggest weaknesses of the Superfood Picker:</p>
+<p><strong>1).  It evaluates price by price for 30 servings.</strong>   Serving sizes are completely at the manufacturer’s discretion.  The best way to evaluate a product’s cost effectiveness is price per ounce.  Unfortunately most people don’t know what they want to pay per ounce, so I ask for price for 30 servings.  This means products that have smaller containers and lower prices will rate out higher than those that have larger containers and higher prices, even if the latter has a lower price per ounce.</p> 
+<p>So in my opinion it underrates products like Vitamineral Green and Pure Synergy, which use great ingredients and come in large bottles.</p>  
+<p><strong>2).  It might unfairly punish products that have simple ingredient lists.</strong>    There’s a reward for having a greater diversity of ingredients, but some people prefer products that have simple, clean ingredient stacks rather than everything-under-one-roof products, which the superfood picker slightly favors.</p>
+<p>I tried to counter this by punishing products that include low quality ingredients, all else being equal it’ll rate out something like Green Vibrance higher than Dr. Schulze’s Superfood Plus, which has a very strong, highly certified ingredient list, but is small compared to other products.</p>
+
+<p><strong>I Make My Own Greens Powders, Why Aren’t They Included?</strong></p>
+<p>You might notice that I make my own nutrient powders.</p>
+<p>I decided not to include my own in the picker.  This might change in the future if enough people ask for it, but for now I’m holding back because I decided including them would invite accusations of bias or gaming the ratings system if mine rated out higher than others that they didn’t agree with.</p>
+<p>Of course when I hold them back you could make the accusation that I’m afraid of testing my own product against what’s out there.  So you can’t win either way.</p>
+<p>But for now I decided this is what’s best.</p>
+<p>If you have an opinion on this issue or want me to run the superfood picker on my own products feel free to write me at <a href="mailto:support@healthkismet.com">support@healthkismet.com</a> and I’ll take your inquiries into account.</p>
+</div>
+				<div class="footer">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4">
+						<hr>
+					</div>
+				</div>
+				<footer>
+					<p class="text-center">Links to Amazon are affiliate links and this site collects a commision when you click on them.</p>
+					<p class="text-center"> <a href="http://www.healthkismet.com">Company Home</a> - <a href="http://www.healthkismet.com/superfood-picker/">Superfood Picker</a> - <a href="http://blog.healthkismet.com">Blog</a> - <a href="http://www.healthkismet.com/superfood-picker/faq/">FAQ</a> - <a href="http://www.healthkismet.com/legal/terms.html">Terms</a> - <a href="http://www.healthkismet.com/legal/privacy.html">Privacy</a></p>
+						<address>
+							<p class="text-center">Health Kismet <br />
+							205 72nd Ave Suite 5 <br />
+							St. Pete Beach, Fl 33706 <br />
+							1-866-606-7473 <br />
+							<a href="mailto:support@healthkismet.com">support@healthkismet.com</a></p>
+						</address>
+				</footer>
+			</div>
+</div>
+</body>
+</html>
