@@ -21,16 +21,39 @@
 	
 	<!-- Latest compiled and minified CSS for bootstrap -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/yeti/bootstrap.min.css" rel="stylesheet">
-	<link href="picker.css" rel="stylesheet">
+	<link href="../css/picker.css" rel="stylesheet">
+	
+	<!--CSS Files for Taras -->
+	<!--<link rel="stylesheet" href="css/bootstrap.min.css" /> removed because isn't compatible with bootswatch-->
+	<link rel="stylesheet" href="../css/jquery-ui-slider-pips.css" />
+	<link rel="stylesheet" href="../css/jquery.bxslider.css" />
+	<link href="/css/jquery-ui.min.css" rel="stylesheet" />
+	<link href="/css/site.css" rel="stylesheet" />
+	<link href="/css/media.css" rel="stylesheet" />
 	
 	<!-- Le Javascript -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>	
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> removed because it interferes with Taras' ui-->	
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script src="interactions_2.js"></script>
-	<script src="analyzer.js"></script>
-	<script src="picker-charts.js"></script>
+	
+	<!--Google Analytics Code-->
+		  <script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-17750265-4']);
+		  _gaq.push(['_setDomainName', 'healthkismet.com']);
+		  _gaq.push(['_setAllowHash', false]);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+		
+	<!-- Olark Code ---->
+	
 	
 </head>
 	<body>
@@ -78,17 +101,251 @@
 				</nav>
 			</div>
 			<div id="part1">
-				<h1 class="text-center">The Superfood Picker</h1>
+				<h1 class="text-center">The Superfood Picker <br />
+							<small>Customized Supplement Recommendation Engine</small></h1>
+				<h4 class="text-center">Answer the questions below to get your customized superfood powder recommendation.</h4>
 				<!-- Go to www.addthis.com/dashboard to customize your tools -->
 					<div class="addthis_sharing_toolbox text-center"></div>
 				
 					<!-- Div for the UI created by Taras/ArtyGeek -->
 					<div class="taras">
+					<div class="taras-container">
+					<div class="page-wrapper">
+            <div class="row">
+                <ul class="bxslider list-unstyled">
+                    <li>
+                        <section class="content">
+                            <div class="part-title">Part 1 : Ingredients</div>
+                            <div class="question-wrap">
+                                <div>Any Ingredients You Want To Include?</div>
+                                <div class="question-wrap_small">Move to the right to include. Don't know? Don't care? Leave it blank.</div>
+                            </div>
+                            <div class="section-wrap ingredients-include">
+                                <ul class="select-box additem-box ">
+                                    <li data-id="1" data-name="fiber">Fiber</li>
+                                    <li data-id="2" data-name="vitamins">Vitamin add-ins</li>
+                                    <li data-id="3" data-name="caffeine">Caffeinated ingredients</li>
+                                    <li data-id="4" data-name="grasses">Grasses</li>
+                                    <li data-id="5" data-name="algaes">Algaes</li>
+                                    <li data-id="6" data-name="mushrooms">Mushrooms</li>
+                                    <li data-id="7" data-name="lecithin">Lecithin</li>
+									<li data-id="8" data-name="sea vegetables">Sea Vegetables</li>
+									<li data-id="9" data-name="fruits">Fruits</li>
+									<li data-id="10" data-name="probiotics">Probiotics</li>
+									<li data-id="11" data-name="enzymes">Enzymes</li>
+									<li data-id="12" data-name="herbs">Herbs</li>
+                                </ul>
+                                <div class="btn-wrapper">
+                                    <button class='pushitem btn'></button>
+                                    <button class='removeitem btn'></button>
+                                </div>
+                                <ul class="select-box removeitem-box">
+                                </ul>
+                            </div>
+                            <div class="question-wrap">
+                                <div>Any ingredients You Want To Avoid?</div>
+                                <div class="question-wrap_small">Move to the right to exclude. Don't know? Don't care? Leave it blank.</div>
+                            </div>
+                            <div class="section-wrap ingredients-avoid">
+                                <ul class="select-box additem-box ">
+                                    <li data-id="1" data-name="fiber">Fiber</li>
+                                    <li data-id="2" data-name="vitamins">Vitamin add-ins</li>
+                                    <li data-id="3" data-name="caffeine">Caffeinated ingredients</li>
+                                    <li data-id="4" data-name="grasses">Grasses</li>
+                                    <li data-id="5" data-name="algaes">Algaes</li>
+                                    <li data-id="6" data-name="mushrooms">Mushrooms</li>
+                                    <li data-id="7" data-name="lecithin">Lecithin</li>
+									<li data-id="8" data-name="sea vegetables">Sea Vegetables</li>
+									<li data-id="9" data-name="fruits">Fruits</li>
+									<li data-id="10" data-name="probiotics">Probiotics</li>
+									<li data-id="11" data-name="enzymes">Enzymes</li>
+									<li data-id="12" data-name="herbs">Herbs</li>
+                                </ul>
+                                <div class="btn-wrapper">
+                                    <button class='pushitem btn'></button>
+                                    <button class='removeitem btn'></button>
+                                </div>
+                                <ul class="select-box removeitem-box">
+                                </ul>
+                            </div>
+                        </section>
+                    </li>
+                    <li>
+                        <section class="content section-price">
+                            <div class="part-title">Part 2: Price</div>
+                            <div class="question-wrap">What's The Most You're Willing to Pay For a 30 Day Supply?</div>
+							<div class="question-wrap_small">Slide to choose.</div>
+                            <div class="section-wrap section-wrap_popup">
+                                <div class="slider-with-pips"></div>
+                            </div>
+                        </section>
+                    </li>
+                    <li>
+                        <section class="content">
+                            <div class="part-title">Part 3 : Taste</div>
+                            <div class="question-wrap">How Much of a "Greens" Taste Do You Want?</div>
+                            <div class="section-wrap taste-greens">
+                                <input id="r1" name="radio" type="radio" value="1"  class="greens-radio">
+                                <label for="r1"><span></span>As much as possible</label>
+                                <input id="r2" name="radio" type="radio" value="2" class="greens-radio">
+                                <label for="r2"><span></span>A little is okay</label>
+                                <input id="r3" name="radio" type="radio" value="3" checked class="greens-radio">
+                                <label for="r3"><span></span>Something Neutral</label>
+                                <input id="r4" name="radio" type="radio" value="4"  class="greens-radio">
+                                <label for="r4"><span></span>Less is better</label>
+                                <input id="r5" name="radio" type="radio" value="5"  class="greens-radio">
+                                <label for="r5"><span></span>Please none at all</label>
+                            </div>
+                            <div class="question-wrap">How Sweet Do You Want It?</div>
+                            <div class="section-wrap section-sweet">
+								<input id="r6" name="radio2" type="radio" value="1"  class="sweets-radio">
+                                <label for="r6"><span></span>Not at all</label>
+                                <input id="r7" name="radio2" type="radio" value="2" class="sweets-radio">
+                                <label for="r7"><span></span>Not too sweet</label>
+                                <input id="r8" name="radio2" type="radio" value="3" checked class="sweets-radio">
+                                <label for="r8"><span></span>Something Neutral</label>
+                                <input id="r9" name="radio2" type="radio" value="4"  class="sweets-radio">
+                                <label for="r9"><span></span>I like it sweet</label>
+                                <input id="r10" name="radio2" type="radio" value="5"  class="sweets-radio">
+                                <label for="r10"><span></span>As sweet as possible</label>
+                                <!-- <div class="slider-horizontal"></div> -->
+                            </div>
+
+                            <div class="question-wrap">Flavors: Yaye or Naye?</div>
+                            <div class="section-wrap section-flavors">
+								<input id="r11" name="radio3" type="radio" value="1"  class="flavors-radio">
+                                <label for="r11"><span></span>Don't Want</label>
+                                <input id="r12" name="radio3" type="radio" value="2" checked class="flavors-radio">
+                                <label for="r12"><span></span>Don't Care</label>
+                                <input id="r13" name="radio3" type="radio" value="3" class="flavors-radio">
+                                <label for="r13"><span></span>Want</label>
+                                <!-- <div class=" slider-flavors"></div> -->
+                            </div>
+                        </section>
+                    </li>
+                    <li>
+                        <section class="content">
+                            <div class="part-title">Part 4 : Features</div>
+                            <div class="question-wrap">What Features Do You Want?</div>
+							<div class="question-wrap_small">Move to the right to include. Don't know? Don't care? Leave it blank.</div>
+                            <div class="section-wrap section-features">
+                                <ul class="select-box additem-box">
+                                    <li data-id="1" data-name="Organic">Organic</li>
+                                    <li data-id="2" data-name="NonGMO">Non GMO</li>
+                                    <li data-id="3" data-name="GlutenFree">Gluten Free</li>
+                                    <li data-id="4" data-name="SoyFree">Soy Free</li>
+                                    <li data-id="5" data-name="DairyFree">Dairy Free</li>
+									<li data-id="6" data-name="Vegan">Vegan</li>
+									<li data-id="7" data-name="Paleo">Paleo</li>
+									<li data-id="8" data-name="Kosher">Kosher</li>
+									<li data-id="9" data-name="WildCrafted">Wild Crafted</li>
+                                </ul>
+                                <div class="btn-wrapper">
+                                    <button class='pushitem btn'></button>
+                                    <button class='removeitem btn'></button>
+                                </div>
+                                <ul class="select-box removeitem-box">
+                                </ul>
+                            </div>
+                        </section>
+                    </li>
+                    <li>
+                        <section class="content section-part5">
+                            <div class="part-title">Part 5 : Priorities</div>
+                            <div class="question-wrap">Please Rank The Following Priorities For Your Selection (Highest First).  Drag to Move.</div>
+                            <div class="section-wrap">
+                                <ul id="sortable" class=" priorities">
+                                    <li class="ui-state-default" data-name="taste">Taste</li>
+                                    <li class="ui-state-default" data-name="nutrients">Nutrients</li>
+                                    <li class="ui-state-default" data-name="price">Price</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </li>
+                </ul>
+                <div class="outside">
+                    <footer>
+                        <div class="navigation-wrapper">
+                            <div class="col-xs-6">
+                                <span id="slider-prev" class="btn nav-item previous-btn"></span>
+                            </div>
+                            <div class="col-xs-6 ">
+                                <span id="slider-next" class="btn nav-item next-btn">
+                                    <!--"Get my superfood powder" btn is apeend in file site.js ... line -> 18 -->
+                                </span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+		<!-- Div removed because I'm not using the modal in the program ----------------------->
+         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-title">The Superfood Picker</div>
+                <div id="food-template"></div>
+                <script id="foodTmpl" type="text/x-jquery-tmpl">
+                    <div class="modal-template">
+                        <div class="base-info">
+                         <div class="modal-section">Any ingredients You Want To Include?</div>
+                         <ul class="list-food">
+                          {{each ingredientsToInclude}}
+                              <li>${name}</li>
+                          {{/each}}
+                          </ul>
+                          <div class="modal-section">Any ingredients You Want To Avoide?</div>
+                          <ul class="list-food">
+                          {{each ingredientsToAvoide}}
+                              <li>${name}</li>
+                          {{/each}}
+                          </ul>
+                          <div class="modal-section">What's the most you're willing to pay for a 30 day supply?</div>
+                          <ul>
+                            <li>
+                                ${price}
+                            </li>
+                          </ul>
+                            <div class="modal-section">How Much of a "Greens" Taste do You Want?</div>
+                            <ul>
+                              <li>
+                                ${greens}
+                                </li>
+                              </ul>
+                            <div class="modal-section">How Sweet do you Want It?</div>
+                            <ul>
+                              <li>
+                                ${sweet}
+                                </li>
+                              </ul>
+                              <div class="modal-section">Flavors: Yaye or Naye?</div>
+                              <ul>
+                                <li>
+                                ${flavors}
+                                </li>
+                              </ul>
+                            <div class="modal-section">What Features Do You Want?</div>
+                            <ul class="list-food">
+                                {{each features}}
+                                    <li>${name}</li>
+                                {{/each}}
+                            </ul>
+                            <div class="modal-section">Please Rank The Following Priorities For Your Selection (Highest First)</div>
+                            <ul>
+                            {{each priorities}}
+                                <li>${prioritiesItem}</li>
+                            {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+    </div>
+	</div>
 					
 					</div>
 					<!-- End div for Taras/ArtyGeek -->
-				
-					<button class="analyze btn btn-primary">Analyze</button>
 					
 					<div class="row">
 						<div class="col-md-4 col-md-offset-4">
@@ -107,6 +364,23 @@
 							</select>
 					</div>
 						<p class="text-center btn-p"><button class="btn btn-warning compare" data-toggle="modal" data-target="#myModal2">Compare</button></p>
+						
+						<div class="row">
+							<div class="col-md-4 col-md-offset-4">
+								<hr>
+							</div>
+						</div>
+						
+						<h2 class="text-center">Click On A Product To Go To Its Detail Page</h2><br />
+						
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<div class="product-list">
+									<ul class="list-inline product-pick">
+									</ul>
+								</div>
+							</div>
+						</div>
 						
 						
 					<!-- Modal 1-->
@@ -158,6 +432,8 @@
 								<ul class="list-inline">
 								</ul>
 							</div>
+							<br />
+							<button class="btn btn-warning stats" data-toggle="modal" data-target="#myModal3">View Complete Stats</button>
 						</div>
 					</div>
 				</div>
@@ -244,15 +520,35 @@
 							<h4 class="modal-title" id="myModalLabel">Label</h4>
 						  </div>
 						  <div class="modal1-body">
+						  
 								
 						  </div>
 						  <div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-default bottom-close" data-dismiss="modal">Close</button>
 						  </div>
 						</div>
 					  </div>
 					</div>
 				<!-- End Modal 2 -->
+				
+				<!-- Modal 3-->
+					<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-dialog modal-lg">
+						<div class="modal-content">
+						  <div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="myModalLabel">Label</h4>
+						  </div>
+						  <div class="modal3-body">
+								
+						  </div>
+						  <div class="modal-footer">
+							<button type="button" class="btn btn-default bottom-close" data-dismiss="modal">Close</button>
+						  </div>
+						</div>
+					  </div>
+					</div>
+				<!-- End Modal 3 -->
 				
 			</div>
 				<div class="footer">
@@ -262,8 +558,8 @@
 					</div>
 				</div>
 				<footer>
-					<p class="text-center">Links to Amazon are affiliate links and this site collects a commision when you click on them.</p>
-					<p class="text-center"> <a href="http://www.healthkismet.com">Company Home</a> - <a href="http://www.healthkismet.com/superfood-picker/">Superfood Picker</a> - <a href="http://blog.healthkismet.com">Blog</a> - <a href="http://www.healthkismet.com/superfood-picker/faq/">FAQ</a> - <a href="http://www.healthkismet.com/legal/terms.html">Terms</a> - <a href="http://www.healthkismet.com/legal/privacy.html">Privacy</a></p>
+					<p class="text-center">Links to Amazon are affiliate links and this site collects a commission when you click on them.</p>
+					<p class="text-center"> <a href="http://www.healthkismet.com">Company Home</a> - <a href="http://www.healthkismet.com/superfood-picker/">Superfood Picker</a> - <a href="http://blog.healthkismet.com">Blog</a> - <a href="http://www.healthkismet.com/superfood-picker/how-it-works/">How It Works</a> - <a href="http://www.healthkismet.com/legal/terms.html">Terms</a> - <a href="http://www.healthkismet.com/legal/privacy.html">Privacy</a></p>
 						<address>
 							<p class="text-center">Health Kismet <br />
 							205 72nd Ave Suite 5 <br />
@@ -274,6 +570,18 @@
 				</footer>
 			</div>
 		</div>
+	
+	<!--<script src="js/bootstrap.min.js"></script> -->
+	<!--<script src="js/jquery-2.1.1.min.js"></script> -->
+    <script src="/js/jquery.tmpl.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script src="/js/jquery-ui-slider-pips.js"></script>
+    <script src="/js/jquery.ui.touch-punch.js"></script>
+    <script src="/js/jquery.bxslider.js"></script>
+    <script src="/js/site.js"></script>
+	<script src="/js/analyzer.js"></script>
+	<script src="/js/interactions_2.js"></script>
+	<script src="/js/picker-charts.js"></script>
 		
 	</body>
 </html>
