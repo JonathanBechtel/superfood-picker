@@ -1,0 +1,105 @@
+
+@media screen and ( max-width: 640px ) {
+.navigation-wrapper {
+    padding: 0px;
+    }
+    .content .section-wrap {
+    padding: 30px 10px;
+    }
+  .content .question-wrap {
+  font-size: 21px;
+  padding: 20px 10px;
+}
+
+
+.ui-slider-pip-last .ui-slider-label {
+    left: -60px ;
+}
+.ui-slider-pip-first .ui-slider-label {
+    left:6px;
+}
+.navigation-wrapper .nav-item {
+    width: 100%;
+    padding: 5px;
+}
+.content .question-wrap {
+    padding: 30px 10px;
+    }
+    .modal-lg {
+      width: 470px;
+    }
+    .modal-section {
+      font-family: adobe garmond;
+      font-size: 18px;
+    }
+    .base-info ul li {
+    font-size: 18px;
+  }
+  .base-info ul {
+    margin: 0px auto;
+  }
+}
+
+@media screen and ( max-width: 480px ) {
+    header .title {
+        font-size: 36px;
+    }
+    header .title-wrap {
+      padding: 25px 10px;
+      }
+      .ui-slider-pip-last .ui-slider-label {
+          left: -50px !important ;
+      }
+    .select-box li ,.priorities li {
+        padding: 5px 5px 5px 10px ;
+        font-size: 17px;
+    }
+    .select-box li.active,.select-box li:hover ,.priorities li.active ,.priorities li:hover{
+      padding-left: 20px;
+    }
+    .content .section-wrap {
+      padding: 10px;
+      }
+    .btn-wrapper .btn {
+      background-size: 20px 30px !important;
+    }
+    .select-box {
+      height: 150px;
+      }
+      .btn-wrapper .btn {
+      height: 70px;
+    }
+    .navigation-wrapper > div{
+      width: 100%;
+      padding: 0;
+    }
+    .navigation-wrapper .nav-item {
+      width: 100%;
+      padding: 10px 0;
+      text-align: center;
+  }
+  .navigation-wrapper {
+      padding: 0px;
+      }
+      .ui-slider-pips .ui-slider-label {
+          font-size: 14px;
+      }
+      .section-wrap > label {
+      font-size: 14px;
+  }
+  .ui-slider-pips .ui-slider-pip-label .ui-slider-label {
+    display: block;
+    font-size: 14px !important;
+    width: 4em;
+  }
+  .modal-lg {
+      width: 350px;
+  }
+}
+
+
+@media screen and ( max-width: 360px ) {
+  .modal-lg {
+      width: 270px;
+  }
+}
