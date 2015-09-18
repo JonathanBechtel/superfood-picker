@@ -4,15 +4,15 @@ var state;
 var init = function() {
 	state = {
 		greens: [],
-		desired: ["caffeine", "algaes", "probiotics"],
-		forbidden: ["lecithin"],
+		desired: [],
+		forbidden: [],
 		price: null, 
 		taste: {
 			greens: null,  
 			sweetness: null, 
 			flavors: null 
 		},
-		features: ["Organic", "NonGMO", "GlutenFree"],
+		features: [],
 		priority: []
 	}
 };
@@ -22,6 +22,8 @@ var init = function() {
 
 //****To Determine Price Score ****//
 var price = {
+	
+	//**modifies reduction in price score depending on user preferences **//
 	difference: function(desiredPrice, productPrice) {
 		return ((productPrice.pricePer30 - desiredPrice)/desiredPrice) * 100;
 	},
@@ -40,6 +42,7 @@ var price = {
 		}
 	},
 	
+	//**penalizes product price depending on difference between it and user preferences **//
 	compare: function(desiredPrice, productPrice) {
 		if (productPrice.pricePer30 <= desiredPrice) {
 			return 100;
@@ -54,6 +57,7 @@ var price = {
 		}
 	},
 		
+	//**modifies price score depending on user priorities **//
 	modify: function(desiredPrice, productPrice) {
 		if (state.priority[0] === "price") {
 			return this.compare(desiredPrice, productPrice) * 0.5;
@@ -73,6 +77,8 @@ var price = {
 //****** To Determine Taste Score ******//
 
 var taste = {
+	
+	//**compares difference between desired taste characteristics and product taste characteristics **//
 	preference: function(desiredTaste, productTaste) {
 		if (desiredTaste === productTaste) {
 			return 5;
@@ -95,6 +101,7 @@ var taste = {
 		}
 	},
 	
+	//**determines magnitude of impact on taste score depending on difference between user preference and product preferecen **//
 	set: function(desiredTaste, productTaste) {
 		if (desiredTaste === 1 || 2 || 4 || 5 ) {
 			return this.preference(desiredTaste, productTaste);
@@ -105,8 +112,9 @@ var taste = {
 		}
 	},
 	
+	//**compares product flavors with users preferred flavor **//
 	flavors: function(desiredFlavor, productFlavor) {
-		if (desiredFlavor === productFlavor || desiredFlavor === "Don't Care") {
+		if (desiredFlavor === productFlavor || desiredFlavor === 2) {
 			return 3;
 		}
 		else {
@@ -114,10 +122,12 @@ var taste = {
 		}
 	},
 	
+	//**combines scores for greens taste, sweet taste and flavor taste **//
 	total: function(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) {
 		return ((this.set(desiredGreens, productGreens) + this.set(desiredSweetness, productSweetness) + this.flavors(desiredFlavors, productFlavors))/13) * 100;
 	},
 	
+	//**modifies taste score based on user priorities **//
 	modify: function(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) {
 		if (state.priority[0] === "taste") {
 			return this.total(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) * 0.5;
@@ -136,8 +146,9 @@ var taste = {
 //*******To Determine Nutrient Score******
 
 var nutrients = {
+	//** checks to see if product is organic or wildcrafted and improves their nutrient score if it is **//
 	organic: function(product) {
-		if (product.features[0] === "organic" || product.features[8] === "wild crafted") {
+		if (product.features[0] === "Organic" || product.features[8] === "WildCrafted") {
 			return 10;
 		}
 	
@@ -146,6 +157,7 @@ var nutrients = {
 		}
 	},
 	
+	//** checks for presence of filler and penalizes products depending on how much they have **//
 	filler: function(product) {
 		var overage = product.filler - 0.10;
 		
@@ -162,6 +174,7 @@ var nutrients = {
 		}
 	},
 	
+	//** checks for presence of last 8 ingredients state.greens[x].ingredients **//
 	composition: function(product) {
 		var counter = 0;
 		for (var i = 4; i < 12; i++ ) {
@@ -170,21 +183,24 @@ var nutrients = {
 			}
 		}
 		
-		return ((counter++/8)*100)*0.6;
+		return ((counter/8)*100)*0.6;
 	},
 	
+	//** sums up organic, filler and composition score **//
 	internal: function(product) {
 		return this.organic(product) + this.filler(product) + this.composition(product);
 	},
 	
 	precision: {
 		
+		//** searches items in one array and looks for matches in second array, and keeps track of how many there are **//
 		match: function(array1, array2) {
 			counter = 0;
 			if (array1.length > 0) {
 				for (var i = 0; i < array1.length; i++) {
 					for (var j = 0; j < array2.length; j++) {
-						if (array1[i] === array2[j]) {
+					
+						if (array1[i].toString().toLowerCase() === array2[j].toString().toLowerCase()) {
 							counter++;
 						}
 					}
@@ -204,6 +220,7 @@ var nutrients = {
 			}
 		},
 		
+		//** calculates external nutrient score based on how closely product aspects match user preferences **//
 		score: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 			var numerator = this.match(desiredFeatures, productFeatures) + this.match(desiredIngredients, productIngredients) + this.match(forbiddenIngredients, productIngredients);
 			var denominator = desiredFeatures.length + desiredIngredients.length + forbiddenIngredients.length;
@@ -219,6 +236,7 @@ var nutrients = {
 		}
 	},
 	
+	//** averages internal and external nutrient scores **//
 	blend: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 		var internal = this.internal(product);
 		var external = this.precision.score(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product);
@@ -226,6 +244,7 @@ var nutrients = {
 		return (internal + external)/2;
 	},
 	
+	/** modifies nutrient score based on user priorities **/
 	modify: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) {
 		if (state.priority[0] === "nutrients") {
 			return this.blend(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) * 0.5;
@@ -242,24 +261,39 @@ var nutrients = {
 }
 
 var total = {
+	
+	//** calls all functions needed to calculate product score **//
 	score: function(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product, desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors, desiredPrice) {
 		return nutrients.modify(desiredFeatures, productFeatures, desiredIngredients, productIngredients, forbiddenIngredients, product) + taste.modify(desiredGreens, productGreens, desiredSweetness, productSweetness, desiredFlavors, productFlavors) + price.modify(desiredPrice, product);
 	},
 	
+	//** loops through calculations needed to produce product score for all objects in state.greens **//
 	loop: function() {
 		for (var i = 0; i < state.greens.length; i++) {
 			state.greens[i].score = this.score(state.features, state.greens[i].features, state.desired, state.greens[i].ingredients, state.forbidden, state.greens[i], state.taste.greens, state.greens[i].taste.greens, state.taste.sweetness, state.greens[i].taste.sweetness, state.taste.flavors, state.greens[i].taste.flavors, state.price);
 		}
 	},
 	
+	//** clears data from state object when user goes back to change preferences **//
 	reset: function() {
 		for (var i = 0; i < state.greens.length; i++) {
 			state.greens[i].score = null;
 		}
+		
+		state.priority = [];
+		state.desired = [];
+		state.forbidden = [];
+		state.features = [];
+		state.taste.greens = null;
+		state.taste.sweetness = null;
+		state.taste.flavors = null;
+		state.price = null;
 	}
 }
 
 //******Storage Functions ******//
+
+//*****creates object that stores information about greens powders and loads them into state.greens ***********//
 var storage = {
 	pack: function(name, price, oz, number, filler, total, lecithin, fiber, vitamins, caffeine, grasses, algaes, seaVegetables, fruits, probiotics, enzymes, mushrooms, herbs, greensTaste, sweetness, flavors, organic, nonGMO, glutenFree, soyFree, dairyFree, vegan, paleo, kosher, wildCrafted, img, link, website, review, label) {
 		var greensPowder = {
@@ -286,17 +320,32 @@ var storage = {
 			
 			state.greens.push(greensPowder);
 	},
+	
+	//** transfers data from arrays stored in foodData to arrays in state **//
+	stuff: function (index1, index2) {
+		for (var i = 1; i < foodData[index1].length; i++) {
+			state[index2].push(foodData[index1][i].name);
+		}
+	},
 
-	set: function(price, greens, sweetness, flavors, nutrients, cost, taste) {
-		state.price = price;
-		state.taste.greens = greens;
-		state.taste.sweetness = sweetness;
-		state.taste.flavors = flavors;
+	//** transfers data from foodData object in site.js to state object in analyzer.js, which is used to calculate product scores **//
+	set: function() {
+		state.price = parseInt(foodData.price.replace("$", ""));
+		state.taste.greens = parseInt(foodData.greens);
+		state.taste.sweetness = parseInt(foodData.sweet);
+		state.taste.flavors = parseInt(foodData.flavors);
 		
-		state.priority.push(nutrients, cost, taste);
+		for (var i = 0; i < foodData.priorities.length; i++) {
+			state.priority.push(foodData.priorities[i].prioritiesItem.toLowerCase());
+		}
+		
+		this.stuff('ingredientsToInclude', 'desired');
+		this.stuff('ingredientsToAvoide', 'forbidden');
+		this.stuff('features', 'features');
 	}
 }
 
+//**sorts objects in state.greens, both by product score and name **//
 var compare = {
 	score: function(a, b) {
 		if (a.score > b.score) {
@@ -323,6 +372,7 @@ var compare = {
 	}
 }
 
+//**shuffle function used to generate products in display.related() **//
 var shuffle = function(array) {
 	
 	for (var i = array.length - 1; i > 0; i--) {
@@ -334,20 +384,31 @@ var shuffle = function(array) {
 	return array;
 }
 
-//calling functions to load the program
+
+//** initiates state object **//
 init();
-storage.pack("Amazing Grass", 19.99, 2.35, 26, 0.1335, 8.47, false, "fiber", "vitamins", "caffeine", "grasses", "algaes", false, "fruits", "probiotics", "enzymes", false, false, 1, 2, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/amg_grass_bottle.jpg", "http://www.amazon.com/gp/product/B00112ILZM/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B00112ILZM&linkCode=as2&tag=webdevelopm00-20&linkId=BZ5FZIKBYEFNNEWD", "http://www.amazinggrass.com", "http://blog.healthkismet.com/amazing-grass-green-superfood-review", "http://www.healthkismet.com/img/superfood-picker/amg_grass_label.jpg");
-storage.pack("Vitamineral Green", 44.95, 4.28, 38, 0, 10.58, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 2, 2, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/vg_bottle.jpg", false, "www.healthforce.com", "http://blog.healthkismet.com/vitamineral-green-review-price-taste-value", "http://www.healthkismet.com/img/superfood-picker/vg_label.jpg");
-storage.pack("Macro Greens", 28.84, 2.88, 38, 27.25, 10, "lecithin", "fiber", false, "caffeine", "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 4, 4, false, false, "NonGMO", "GlutenFree", false, "DairyFree", "Vegan", false, false, false, "http://www.healthkismet.com/img/superfood-picker/macro_greens_bottle.jpg", "http://www.amazon.com/gp/product/B000F4H5UO/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B000F4H5UO&linkCode=as2&tag=webdevelopm00-20&linkId=VYGP2H6ZCGTPD57B", "http://macrolifenaturals.com/macro-greens-superfood/", "http://blog.healthkismet.com/macro-greens-review", "http://www.healthkismet.com/img/superfood-picker/macro_greens_label.jpg");
-storage.pack("All Day Energy Greens", 39.99, 4.26, 41, 25, 11.36, "lecithin", "fiber", false, false, "grasses", "algaes", "sea vegetables", "fruits", false, "enzymes", false, "herbs", 4, 4, true, false, false, false, false, "DairyFree", "Vegan", false, false, false, "http://www.healthkismet.com/img/superfood-picker/adeg_bottle.jpg", "http://amzn.to/1TrmeWt", "http://www.ivlproducts.com/Superfoods/All-Day-Energy-Greens-174---Original---Hi-Octane-Energy-Drink-For-Health-Life.axd", "http://blog.healthkismet.com/all-day-energy-greens-review", "http://www.healthkismet.com/img/superfood-picker/adeg_label.PNG");
-storage.pack("Green Vibrance", 37.96, 2.97, 77, 25, 12.8, "lecithin", "fiber", "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 2, 2, false, false, "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/greenvibrance_bottle.jpg", "http://amzn.to/1RpyLMr", "http://www.vibranthealth.com/green-vibrance/product-pages/green-vibrance/", "http://blog.healthkismet.com/green-vibrance-review", "http://www.healthkismet.com/img/superfood-picker/greenvibrance_label.jpg");
-storage.pack("Pure Synergy", 54.95, 4.40.toFixed(2), 64, 0, 12.5, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", "mushrooms", "herbs", 3, 2, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/pure_synergy_bottle.jpg", "http://amzn.to/1JYpUxd", "http://www.thesynergycompany.com/pure-synergy.html", "http://blog.healthkismet.com/pure-synergy-review-a-very-robust-superfood-powder", "http://www.healthkismet.com/img/superfood-picker/pure_synergy_label.PNG");
-storage.pack("Barleans Greens", 30.45, 3.60, 33, 0.1747, 8.46, false, "fiber", false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 1, 4, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/barleans_bottle.jpg", "http://amzn.to/1Mocisy", "https://www.barleans.com/greens.asp", "http://blog.healthkismet.com/superfood-smackdown-essential-greens-vs-gogreens-vs-barleans", "http://www.healthkismet.com/img/superfood-picker/barleans_label.jpg");
-storage.pack("Boku Superfuel", 55.95, 5.28, 10, 0, 10.6, false, false, false, "caffeine", false, false, "sea vegetables", "fruits", false, false, "mushrooms", "herbs", 4, 4, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/boku_bottle.png", false, "http://bokusuperfood.com/product/super-fuel/", "http://blog.healthkismet.com/boku-superfuel-review", "http://www.healthkismet.com/img/superfood-picker/boku_label.PNG");
-storage.pack("Garden of Life Perfect Food RAW", 23.65, 2.93, 34, 0, 8.46, false, false, false, false, "grasses", false, false, "fruits", "probiotics", "enzymes", false, false, 2, 2, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/perfectfood_bottle.jpg", "http://amzn.to/1CysV4K", "http://www.gardenoflife.com/Products-for-Life/Foundational-Nutrition/Perfect-Food-RAW.aspx", "http://blog.healthkismet.com/review-garden-of-life-perfect-food-raw", "http://www.healthkismet.com/img/superfood-picker/perfectfood_label.jpg");
-storage.pack("Greens Plus Original Superfood", 21.30, 2.52, 21, 0, 8.46, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", false, false, false, 2, 3, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/greensplus_bottle.jpg", "http://amzn.to/1TtGmHq", "http://www.greensplus.com/organic-superfood-raw/", "http://blog.healthkismet.com/greens-plus-superfood-the-redwood-oak-of-superfood-powders", "http://www.healthkismet.com/img/superfood-picker/greensplus_label.jpg");
-storage.pack("Vitamineral Earth", 44.95, 4.28, 32, 0, 10.58, false, "fiber", false, "caffeine", false, false, false, false, false, false, false, "herbs", 3, 3, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/vearth_bottle.jpg", false, "https://healthforce.com/superfoods-rejuvenation/earth", "http://blog.healthkismet.com/vitamineral-earth-review", "http://www.healthkismet.com/img/superfood-picker/vearth_label.jpg");
-storage.pack("Dr. Schulze's Superfood Plus", 40.00.toFixed(2), 2.86, 15, 0, 14, false, false, "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", false, false, false, "herbs", 2, 1, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/schulze_bottle.jpg", "http://amzn.to/1SgXr4X", "https://www.herbdoc.com/superfood-plus-powder.html?___SID=U", "http://blog.healthkismet.com/dr-schulze-superfood-plus-review", "http://www.healthkismet.com/img/superfood-picker/schulze_label.jpg");
-storage.set(60, 4, 4, false, "nutrients", "price", "taste");
+
+//** Loads information for each product into state.greens **//
+storage.pack("Amazing Grass", 19.99, 2.35, 26, 0.1335, 8.47, false, "fiber", "vitamins", "caffeine", "grasses", "algaes", false, "fruits", "probiotics", "enzymes", false, false, 1, 2, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/amg_grass_bottle.jpg", "http://www.amazon.com/gp/product/B00112ILZM/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B00112ILZM&linkCode=as2&tag=webdevelopm00-20&linkId=BZ5FZIKBYEFNNEWD", "http://www.amazinggrass.com", "http://blog.healthkismet.com/amazing-grass-green-superfood-review", "http://www.healthkismet.com/img/superfood-picker/amg_grass_label.jpg");
+storage.pack("Vitamineral Green", 44.95, 4.28, 38, 0, 10.58, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 2, 2, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/vg_bottle.jpg", false, "www.healthforce.com", "http://blog.healthkismet.com/vitamineral-green-review-price-taste-value", "http://www.healthkismet.com/img/superfood-picker/vg_label.jpg");
+storage.pack("Macro Greens", 28.84, 2.88, 38, 27.25, 10, "lecithin", "fiber", false, "caffeine", "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 4, 4, 1, false, "NonGMO", "GlutenFree", false, "DairyFree", "Vegan", false, false, false, "http://www.healthkismet.com/img/superfood-picker/macro_greens_bottle.jpg", "http://www.amazon.com/gp/product/B000F4H5UO/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B000F4H5UO&linkCode=as2&tag=webdevelopm00-20&linkId=VYGP2H6ZCGTPD57B", "http://macrolifenaturals.com/macro-greens-superfood/", "http://blog.healthkismet.com/macro-greens-review", "http://www.healthkismet.com/img/superfood-picker/macro_greens_label.jpg");
+storage.pack("All Day Energy Greens", 39.99, 4.26, 41, 25, 11.36, "lecithin", "fiber", false, false, "grasses", "algaes", "sea vegetables", "fruits", false, "enzymes", false, "herbs", 4, 4, 1, false, false, false, false, "DairyFree", "Vegan", false, false, false, "http://www.healthkismet.com/img/superfood-picker/adeg_bottle.jpg", "http://amzn.to/1TrmeWt", "http://www.ivlproducts.com/Superfoods/All-Day-Energy-Greens-174---Original---Hi-Octane-Energy-Drink-For-Health-Life.axd", "http://blog.healthkismet.com/all-day-energy-greens-review", "http://www.healthkismet.com/img/superfood-picker/adeg_label.PNG");
+storage.pack("Green Vibrance", 37.96, 2.97, 77, 25, 12.8, "lecithin", "fiber", "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 2, 2, 1, false, "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/greenvibrance_bottle.jpg", "http://amzn.to/1RpyLMr", "http://www.vibranthealth.com/green-vibrance/product-pages/green-vibrance/", "http://blog.healthkismet.com/green-vibrance-review", "http://www.healthkismet.com/img/superfood-picker/greenvibrance_label.jpg");
+storage.pack("Pure Synergy", 54.95, 4.40.toFixed(2), 64, 0, 12.5, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", "mushrooms", "herbs", 3, 2, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/pure_synergy_bottle.jpg", "http://amzn.to/1JYpUxd", "http://www.thesynergycompany.com/pure-synergy.html", "http://blog.healthkismet.com/pure-synergy-review-a-very-robust-superfood-powder", "http://www.healthkismet.com/img/superfood-picker/pure_synergy_label.PNG");
+storage.pack("Barleans Greens", 30.45, 3.60, 33, 0.1747, 8.46, false, "fiber", false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", false, "herbs", 1, 4, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/barleans_bottle.jpg", "http://amzn.to/1Mocisy", "https://www.barleans.com/greens.asp", "http://blog.healthkismet.com/superfood-smackdown-essential-greens-vs-gogreens-vs-barleans", "http://www.healthkismet.com/img/superfood-picker/barleans_label.jpg");
+storage.pack("Boku Superfuel", 55.95, 5.28, 10, 0, 10.6, false, false, false, "caffeine", false, false, "sea vegetables", "fruits", false, false, "mushrooms", "herbs", 4, 4, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/boku_bottle.png", false, "http://bokusuperfood.com/product/super-fuel/", "http://blog.healthkismet.com/boku-superfuel-review", "http://www.healthkismet.com/img/superfood-picker/boku_label.PNG");
+storage.pack("Garden of Life Perfect Food RAW", 23.65, 2.93, 34, 0, 8.46, false, false, false, false, "grasses", false, false, "fruits", "probiotics", "enzymes", false, false, 2, 2, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/perfectfood_bottle.jpg", "http://amzn.to/1CysV4K", "http://www.gardenoflife.com/Products-for-Life/Foundational-Nutrition/Perfect-Food-RAW.aspx", "http://blog.healthkismet.com/review-garden-of-life-perfect-food-raw", "http://www.healthkismet.com/img/superfood-picker/perfectfood_label.jpg");
+storage.pack("Greens Plus Original Superfood", 21.30.toFixed(2), 2.52, 21, 0, 8.46, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", false, false, false, 2, 3, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/greensplus_bottle.jpg", "http://amzn.to/1TtGmHq", "http://www.greensplus.com/organic-superfood-raw/", "http://blog.healthkismet.com/greens-plus-superfood-the-redwood-oak-of-superfood-powders", "http://www.healthkismet.com/img/superfood-picker/greensplus_label.jpg");
+storage.pack("Vitamineral Earth", 44.95, 4.28, 32, 0, 10.58, false, "fiber", false, "caffeine", false, false, false, false, false, false, false, "herbs", 3, 3, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/vearth_bottle.jpg", false, "https://healthforce.com/superfoods-rejuvenation/earth", "http://blog.healthkismet.com/vitamineral-earth-review", "http://www.healthkismet.com/img/superfood-picker/vearth_label.jpg");
+storage.pack("Dr. Schulze's Superfood Plus", 40.00.toFixed(2), 2.86, 15, 0, 14, false, false, "vitamins", false, "grasses", "algaes", "sea vegetables", "fruits", false, false, false, "herbs", 2, 1, 1, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, "WildCrafted", "http://www.healthkismet.com/img/superfood-picker/schulze_bottle.jpg", "http://amzn.to/1SgXr4X", "https://www.herbdoc.com/superfood-plus-powder.html?___SID=U", "http://blog.healthkismet.com/dr-schulze-superfood-plus-review", "http://www.healthkismet.com/img/superfood-picker/schulze_label.jpg");
+storage.pack("Boku Superfood", 50.95, 5.42, 54, 0, 9.4, false, false, false, false, "grasses", "algaes", "sea vegetables", "fruits", "probiotics", "enzymes", "mushrooms", "herbs", 3, 3, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", "Kosher", false, "http://www.healthkismet.com/img/superfood-picker/boku_superfood_bottle.png", false, "http://bokusuperfood.com/product/super-food/#", false, false);
+storage.pack("MegaFood Daily Turmeric Booster", 15.17, 7.26, 11, 0, 2.09, false, false, false, false, false, false, false, "fruits", false, false, false, "herbs", 3, 3, false, "Organic", "NonGMO", "GlutenFree", "SoyFree", "DairyFree", "Vegan", "Paleo", false, false, "http://www.healthkismet.com/img/superfood-picker/megafood-turmeric.jpg", "http://amzn.to/1VzmIuG", "https://megafood.com/store/en/daily-turmeric-nutrient-booster-powder/", false, "http://www.healthkismet.com/img/superfood-picker/megafood-label.jpg");
+
+//**sorts products in state.greens by alphabetical order **//
 state.greens.sort(compare.name);
-$(function() { display.compare(); });
+
+//**loads dropdown boxes with products **//
+$(function() { display.selectLoad(); });
+
+//** loads product blocks at bottom of page in #part1 of index.html **//
+$(function() { display.productLoad(); });
